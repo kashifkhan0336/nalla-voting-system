@@ -11,6 +11,7 @@ import {
   Keyboard,
   Input,
   Toggle,
+  Modal,
 } from "@geist-ui/core";
 import Plot from "react-plotly.js";
 function useStickyState(defaultValue, key) {
@@ -24,6 +25,12 @@ function useStickyState(defaultValue, key) {
   return [value, setValue];
 }
 function App() {
+  const [state, setState] = useState(false);
+  const handler = () => setState(true);
+  const closeHandler = (event) => {
+    setState(false);
+    console.log("closed");
+  };
   const [mqm_votes, addMQMVote] = useStickyState(0, "mqm_votes");
   const [pti_votes, addPTIVote] = useStickyState(0, "pti_votes");
   const [ppp_votes, addPPPVote] = useStickyState(0, "ppp_votes");
@@ -44,14 +51,23 @@ function App() {
               console.log(your_age.current.value);
               addMQMVote((mqm_votes) => mqm_votes + 1);
               setInputType("success");
+              your_age.current.value = "";
+              your_name.current.value = "";
+              handler();
               break;
             case "1":
               addPTIVote((pti_votes) => pti_votes + 1);
               setInputType("success");
+              your_age.current.value = "";
+              your_name.current.value = "";
+              handler();
               break;
             case "3":
               addPPPVote((ppp_votes) => ppp_votes + 1);
               setInputType("success");
+              your_age.current.value = "";
+              your_name.current.value = "";
+              handler();
               break;
             default:
               break;
@@ -65,6 +81,9 @@ function App() {
   return (
     <div>
       <Page>
+        <Modal visible={state} onClose={closeHandler}>
+          <Modal.Title>Vote casted successfully</Modal.Title>
+        </Modal>
         <Text h1>Cast Your Vote</Text>
         <Input placeholder="Your Name" ref={your_name} />
         <br />
